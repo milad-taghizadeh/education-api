@@ -19,6 +19,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/education-api/test/jest-e2e.json",
     "prisma:generate": "prisma generate --schema ./libs/prisma/prisma/schema.prisma",
+    "prisma:push": "prisma db push --schema ./libs/prisma/prisma/schema.prisma",
     "prisma:migrate": "prisma migrate dev --schema ./libs/prisma/prisma/schema.prisma"
   },
   "dependencies": {
@@ -101,7 +102,15 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
     "roots": [
-      "<rootDir>/apps/"
-    ]
+      "<rootDir>/apps/",
+      "<rootDir>/libs/"
+    ],
+    "moduleNameMapper": {
+      "^@app/database(|/.*)$": "<rootDir>/libs/database/src/$1",
+      "^@app/prisma(|/.*)$": "<rootDir>/libs/prisma/src/$1"
+    },
+    "prisma": {
+      "schema": "<rootDir>/libs/prisma/src/prisma/schema.prisma"
+    }
   }
 }
