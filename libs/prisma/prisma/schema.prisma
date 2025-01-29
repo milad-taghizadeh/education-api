@@ -21,6 +21,8 @@ model User {
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now()) @updatedAt()
 
+  OwnedCourses CourseUser[]
+
   @@map("user")
 }
 
@@ -38,7 +40,7 @@ model Otp {
   @@map("otp")
 }
 
-model Education {
+model Lesson {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String
@@ -51,20 +53,33 @@ model Education {
 }
 
 model Course {
-  id             String           @id @default(auto()) @map("_id") @db.ObjectId
-  title          String
-  description    String
-  type           CourseType
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  type        CourseType
+  seqNum      Int
 
-  educationId    String           @db.ObjectId
-  education      Education        @relation(fields: [educationId], references: [id])
+  lessonId String @db.ObjectId
+  lesson   Lesson @relation(fields: [lessonId], references: [id])
 
-  createdAt      DateTime?        @default(now())
-  updatedAt      DateTime?        @default(now()) @updatedAt
-  
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt
+
   Course_Details Course_Details[]
+  courseUsers CourseUser[]
 
   @@map("course")
+}
+
+model CourseUser {
+  userId   String @db.ObjectId
+  courseId String @db.ObjectId
+
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  @@map("course_user")
 }
 
 model Course_Details {
@@ -76,7 +91,7 @@ model Course_Details {
   media_path  String[]
   createdAt   DateTime? @default(now())
   updatedAt   DateTime? @default(now()) @updatedAt
-  
+
   @@map("course_details")
 }
 
