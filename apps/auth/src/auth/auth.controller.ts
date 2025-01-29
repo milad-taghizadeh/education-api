@@ -8,20 +8,22 @@ import {
 import { AuthService } from './services/auth.service';
 import { CheckOtpDto, SendOtpDto } from './dto/auth.dto';
 import { Response } from 'express';
+import { LoginMessage, LogOutMessage } from './messages/auth.messages';
+import { routes } from './routes/routes';
 
-@Controller('v1/auth')
+@Controller(routes.mainRoute)
 export class AuthController {
 
   constructor(private readonly authService: AuthService) { }
 
-  @Post('login/send-otp')
+  @Post(routes.sendOtp)
   async sendOtp(
     @Body() data: SendOtpDto
   ) {
     return await this.authService.sendOtp(data)
   }
 
-  @Post('login/confirm-otp')
+  @Post(routes.confirmOtp)
   async confirmOtp(
     @Body() data: CheckOtpDto,
     @Res() res: Response
@@ -36,16 +38,16 @@ export class AuthController {
       secure: false
     })
     res.status(200).json({
-      message: "Login Successfully",
+      message: LoginMessage.LOGIN_SUCCESSFULLY,
     })
     res.end()
   }
 
-  @Post('logout')
+  @Post(routes.logout)
   async logout(@Res() res: Response) {
     res.clearCookie("accessToken")
     res.status(200).json({
-      message: "Logout Successfully",
+      message: LogOutMessage.LOGOUT_SUCCESSFULLY,
     })
     res.end()
   }

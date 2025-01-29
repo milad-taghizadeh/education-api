@@ -7,3 +7,12 @@ export enum AuthMessage {
 export enum ServerMessages {
   SERVICE_UNAVAILABLE = 'this service temporarily unavailable'
 }
+
+export enum LoginMessage { 
+  INVALID_CREDENTIALS = 'Invalid Credentials',
+  LOGIN_SUCCESSFULLY = 'Login Successful',
+}
+
+export enum LogOutMessage {
+  LOGOUT_SUCCESSFULLY = 'Logout Successful',
+}
