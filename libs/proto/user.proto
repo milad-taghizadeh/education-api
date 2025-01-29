@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package user;
+import "google/protobuf/timestamp.proto";
+
+message IsUserExist {
+  string phone = 1;
+}
+
+message CreateUser {
+  string phone = 1;
+}
+
+message User {
+  string id = 1;
+  string phone = 2;
+  google.protobuf.Timestamp  createdAt = 4;
+  google.protobuf.Timestamp  updatedAt = 5;
+}
+
+message UserResponse {
+  optional User user = 1;
+}
+
+service UserService {
+  rpc checkUserExist (IsUserExist) returns (User);
+  rpc createUser (CreateUser) returns (User);
+}

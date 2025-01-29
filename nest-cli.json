@@ -4,8 +4,13 @@
   "sourceRoot": "apps/education-api/src",
   "compilerOptions": {
     "assets": [
-      "**/*.proto"
+      "**/*.proto",
+      {
+        "include": "libs/proto/**/*.proto",
+        "outDir": "dist/libs/proto"
+      }
     ],
+    "watchAssets": true,
     "webpack": true,
     "tsConfigPath": "apps/education-api/tsconfig.app.json"
   },

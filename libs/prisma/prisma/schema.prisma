@@ -16,13 +16,7 @@ datasource db {
 model User {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  firstName String? @map("first_name")
-  lastName  String? @map("last_name")
-  email     String? @unique
   phone     String  @unique
-
-  // userState userState @map("user_state")
-  discountId Int?
 
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now()) @updatedAt()
@@ -34,7 +28,7 @@ model Otp {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
   code        String
-  phoneNumber String
+  phone String
   isUsed      Boolean  @default(true)
   expiresIn   DateTime @map("expires_in") 
 
