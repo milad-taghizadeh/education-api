@@ -10,8 +10,8 @@ export class EpisodeController {
 
   @Post()
   async create(@Body() createEpisodeDto: CreateEpisodeDto) : Promise<Episode> {
-    return this.episodeService.create(createEpisodeDto); 
     // @ts-ignore
+    return this.episodeService.create(createEpisodeDto); 
   }
 
   @Get()

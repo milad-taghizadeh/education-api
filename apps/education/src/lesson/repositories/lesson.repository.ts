@@ -15,7 +15,7 @@ export class LessonRepository implements ILessonRepository<Lesson> {
     })
   }
 
-  async update(id: string, data: Lesson): Promise<Lesson> {
+  async update(id: string, data: Partial<Lesson>): Promise<Lesson> {
     return await this.prismaService.lesson.update({
       where: {
         id
@@ -34,8 +34,8 @@ export class LessonRepository implements ILessonRepository<Lesson> {
     })
   }
 
-  async index(id: string): Promise<Lesson> {
-    throw new Error('Method not implemented.');
+  async index(): Promise<Lesson[]> {
+    return await this.prismaService.lesson.findMany();
   }
 
   async findByTitle(title: string): Promise<Lesson> {

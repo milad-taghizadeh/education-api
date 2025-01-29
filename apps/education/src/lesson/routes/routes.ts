@@ -1,8 +1,8 @@
 export const routes = { 
   mainRoute : 'v1/lesson',
   create : 'create',
-  update : 'update/:id', 
+  update : 'update/', 
   findAll : '',
-  findOne : ':id',
-  remove : 'remove/:id'
+  findOne : 'find',
+  remove : 'remove/'
 }

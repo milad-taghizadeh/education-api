@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, Query } from '@nestjs/common';
 import { LessonService } from './services/lesson.service';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
@@ -20,17 +20,17 @@ export class LessonController {
   }
 
   @Get(routes.findOne)
-  findOne(@Param('id') id: string) {
-    return this.lessonService.findOne(+id);
+  findOne(@Query('id') id: string) {
+    return this.lessonService.findOne(id);
   }
 
-  @Patch(routes.update)
-  update(@Param('id') id: string, @Body() updateLessonDto: UpdateLessonDto) {
-    return this.lessonService.update(+id, updateLessonDto);
+  @Put(routes.update)
+  async update(@Query('id') id: string, @Body() updateLessonDto: UpdateLessonDto) : Promise<Lesson> {
+    return this.lessonService.update(id, updateLessonDto);
   }
 
   @Delete(routes.remove)
-  remove(@Param('id') id: string) {
-    return this.lessonService.remove(+id);
+  remove(@Query('id') id: string) {
+    return this.lessonService.remove(id);
   }
 }
