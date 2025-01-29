@@ -2,32 +2,34 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { LessonService } from './services/lesson.service';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
+import { routes } from './routes/routes';
+import { Lesson } from '@prisma/client';
 
-@Controller('lesson')
+@Controller(routes.mainRoute)
 export class LessonController {
   constructor(private readonly lessonService: LessonService) {}
 
-  @Post()
-  create(@Body() createLessonDto: CreateLessonDto) {
+  @Post(routes.create)
+  async create(@Body() createLessonDto: CreateLessonDto) : Promise<Lesson> {
     return this.lessonService.create(createLessonDto);
   }
 
-  @Get()
+  @Get(routes.findAll)
   findAll() {
     return this.lessonService.findAll();
   }
 
-  @Get(':id')
+  @Get(routes.findOne)
   findOne(@Param('id') id: string) {
     return this.lessonService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch(routes.update)
   update(@Param('id') id: string, @Body() updateLessonDto: UpdateLessonDto) {
     return this.lessonService.update(+id, updateLessonDto);
   }
 
-  @Delete(':id')
+  @Delete(routes.remove)
   remove(@Param('id') id: string) {
     return this.lessonService.remove(+id);
   }

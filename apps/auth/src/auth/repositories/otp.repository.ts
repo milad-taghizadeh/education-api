@@ -3,10 +3,6 @@ import { Otp } from "@prisma/client";
 import { PrismaService } from "libs/prisma/src/prisma.service";
 import { IOtpRepository } from "../interfaces/auth.interface";
 
-
-
-
-
 @Injectable()
 export class OtpRepository implements IOtpRepository<Otp> {
 

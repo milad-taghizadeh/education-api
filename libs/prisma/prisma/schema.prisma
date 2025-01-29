@@ -44,6 +44,7 @@ model Lesson {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String
+  media_path  String
   createdAt   DateTime? @default(now())
   updatedAt   DateTime? @default(now()) @updatedAt
 
@@ -56,8 +57,7 @@ model Course {
   id          String     @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String
-  type        CourseType
-  seqNum      Int
+  episodeQty  Int
 
   lessonId String @db.ObjectId
   lesson   Lesson @relation(fields: [lessonId], references: [id])
@@ -65,21 +65,11 @@ model Course {
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now()) @updatedAt
 
+  episodes    Episode[]
   Course_Details Course_Details[]
-  courseUsers CourseUser[]
+  courseUsers    CourseUser[]
 
   @@map("course")
-}
-
-model CourseUser {
-  userId   String @db.ObjectId
-  courseId String @db.ObjectId
-
-  user   User   @relation(fields: [userId], references: [id])
-  course Course @relation(fields: [courseId], references: [id])
-
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  @@map("course_user")
 }
 
 model Course_Details {
@@ -94,6 +84,33 @@ model Course_Details {
 
   @@map("course_details")
 }
+
+model CourseUser {
+  userId   String   @db.ObjectId
+  courseId String[] @db.ObjectId
+
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  @@map("course_user")
+}
+
+model Episode {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  media_path  String[]
+  
+  courseId    String    @db.ObjectId
+  course      Course    @relation(fields: [courseId], references: [id])
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @default(now()) @updatedAt
+
+  @@map("episode")
+}
+
 
 enum CourseType {
   TEXT
