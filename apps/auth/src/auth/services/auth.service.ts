@@ -91,14 +91,4 @@ export class AuthService {
     throw new ServiceUnavailableException(ServerMessages.SERVICE_UNAVAILABLE);
   }
 
-  // private async userRegister(phone: string): Promise<User> {
-  //   return await this.userRepository.create({
-  //     phone: phone,
-  //     email: null,
-  //     firstName: null,
-  //     lastName: null,
-  //     discountId: null,
-  //     status:'NOT_VALIDATED'
-  //   });
-  // }
 }

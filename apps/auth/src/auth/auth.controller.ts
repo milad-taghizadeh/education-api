@@ -14,14 +14,14 @@ export class AuthController {
 
   constructor(private readonly authService: AuthService) { }
 
-  @Post('send-otp')
+  @Post('login/send-otp')
   async sendOtp(
     @Body() data: SendOtpDto
   ) {
     return await this.authService.sendOtp(data)
   }
 
-  @Post('confirm-otp')
+  @Post('login/confirm-otp')
   async confirmOtp(
     @Body() data: CheckOtpDto,
     @Res() res: Response
@@ -39,7 +39,14 @@ export class AuthController {
       message: "Login Successfully",
     })
     res.end()
+  }
 
-    
+  @Post('logout')
+  async logout(@Res() res: Response) {
+    res.clearCookie("accessToken")
+    res.status(200).json({
+      message: "Logout Successfully",
+    })
+    res.end()
   }
 }
