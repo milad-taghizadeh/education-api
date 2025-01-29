@@ -50,6 +50,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/prisma/tsconfig.lib.json"
       }
+    },
+    "education": {
+      "type": "application",
+      "root": "apps/education",
+      "entryFile": "main",
+      "sourceRoot": "apps/education/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/education/tsconfig.app.json"
+      }
     }
   }
 }

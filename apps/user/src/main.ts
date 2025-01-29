@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { UserModule } from './user.module';
 import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 import { join } from 'path';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(UserModule, {
@@ -15,7 +15,7 @@ async function bootstrap() {
   });
 
   app.useGlobalPipes(new ValidationPipe());
-  console.log('user started ::: 5002');
+  Logger.verbose('::::::::::: User : 5002 =======> STARTED :::::::::::');
   await app.listen();
 }
 bootstrap();

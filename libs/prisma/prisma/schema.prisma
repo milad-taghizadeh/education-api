@@ -16,7 +16,7 @@ datasource db {
 model User {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  phone     String  @unique
+  phone String @unique
 
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now()) @updatedAt()
@@ -27,13 +27,61 @@ model User {
 model Otp {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  code        String
-  phone String
-  isUsed      Boolean  @default(true)
-  expiresIn   DateTime @map("expires_in") 
+  code      String
+  phone     String
+  isUsed    Boolean  @default(true)
+  expiresIn DateTime @map("expires_in")
 
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now()) @updatedAt
 
   @@map("otp")
+}
+
+model Education {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @default(now()) @updatedAt
+
+  Course Course[]
+
+  @@map("education")
+}
+
+model Course {
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  description    String
+  type           CourseType
+
+  educationId    String           @db.ObjectId
+  education      Education        @relation(fields: [educationId], references: [id])
+
+  createdAt      DateTime?        @default(now())
+  updatedAt      DateTime?        @default(now()) @updatedAt
+  
+  Course_Details Course_Details[]
+
+  @@map("course")
+}
+
+model Course_Details {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  courseId    String    @db.ObjectId
+  course      Course    @relation(fields: [courseId], references: [id])
+  description String
+  text        String?
+  media_path  String[]
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @default(now()) @updatedAt
+  
+  @@map("course_details")
+}
+
+enum CourseType {
+  TEXT
+  IMAGE
+  VIDEO
 }

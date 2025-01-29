@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
 import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 import { join } from 'path';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AuthModule);
@@ -29,8 +29,7 @@ async function bootstrap() {
     origin: '*',
   });
   
-  console.log('auth started ::: 5001');
-  console.log('auth started ::: 3000');
+  Logger.verbose('::::::::::: AUTH : 3000 =======> STARTED :::::::::::');
   await app.listen(3000, '0.0.0.0');
 }
 bootstrap();
