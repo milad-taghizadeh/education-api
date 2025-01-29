@@ -21,20 +21,25 @@ export class AuthController {
     return await this.authService.sendOtp(data)
   }
 
-  // @Post('confirm-otp')
-  // async confirmOtp(
-  //   @Body() data: CheckOtpDto,
-  //   @Res() res: Response
-  // ) {
-  //   const token = await this.authService.confirmOtp(data)
+  @Post('confirm-otp')
+  async confirmOtp(
+    @Body() data: CheckOtpDto,
+    @Res() res: Response
+  ) {
+    const token = await this.authService.confirmOtp(data)
 
-  //   res.cookie("accessToken", token, {
-  //     // expires: ,
-  //     httpOnly: true,
-  //     path: "/",
-  //     sameSite: "none",
-  //     secure: false
-  //   })
-  //   res.end()
-  // }
+    res.cookie("accessToken", token, {
+      // expires: ,
+      httpOnly: true,
+      path: "/",
+      sameSite: "none",
+      secure: false
+    })
+    res.status(200).json({
+      message: "Login Successfully",
+    })
+    res.end()
+
+    
+  }
 }

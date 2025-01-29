@@ -6,12 +6,11 @@ import {
 } from '@nestjs/common';
 import { NextFunction, Request } from 'express';
 import { ConfigService } from '@nestjs/config';
-import { TokenService } from 'src/modules/auth/token.service';
-import { UserRepository } from 'src/modules/user/user.repository';
-import { CookiePayload } from 'src/modules/auth/types/payload';
+import { TokenService } from 'apps/auth/src/auth/services/token.service';
+import { UserRepository } from 'apps/user/src/repositories/user.repository';
+import { CookiePayload } from "apps/auth/src/auth/types/payload";
 import { JwtService } from '@nestjs/jwt';
 
-@Injectable()
 export class VerifyToken implements NestMiddleware {
   //DI
   constructor(
@@ -35,8 +34,6 @@ export class VerifyToken implements NestMiddleware {
     if (!payload) {
       return next();
     }
-    console.log(payload);
-
     const user = await this.userRepository.findById(payload.UserId);
 
     //set user in req

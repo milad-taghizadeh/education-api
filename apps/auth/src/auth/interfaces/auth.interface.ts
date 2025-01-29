@@ -11,12 +11,8 @@ export interface ISendOtp {
   phone: string,
 }
 
-export interface ISendOtp {
-  phone: string,
-}
-
 export interface IConfirmOtp {
-  phoneNumber: string,
+  phone: string,
   code: string,
   userType: AuthUserType
 }

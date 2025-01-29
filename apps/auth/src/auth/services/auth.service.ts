@@ -1,4 +1,11 @@
-import { BadRequestException, Injectable, Scope, ServiceUnavailableException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Scope,
+  ServiceUnavailableException,
+} from '@nestjs/common';
+import { firstValueFrom } from 'rxjs';
 
 import { TokenService } from './token.service';
 import { OtpRepository } from '../repositories/otp.repository';
@@ -6,19 +13,28 @@ import { CheckOtpDto, SendOtpDto } from '../dto/auth.dto';
 import { User } from '@prisma/client';
 import { AuthMessage, ServerMessages } from '../messages/auth.messages';
 import { AuthUserType } from '../enums/user-type.enum';
-import { ISendOtp } from '../interfaces/auth.repository';
+import { ISendOtp } from '../interfaces/auth.interface';
+import { ClientGrpc } from '@nestjs/microservices';
+import { IGRPCService } from '../interfaces/grpc.interface';
+import { GRPC } from '../enums/grpc.enum';
 
 @Injectable()
 export class AuthService {
+  private userService: IGRPCService;
   constructor(
     private readonly otpRepository: OtpRepository,
     private tokenService: TokenService,
+    @Inject(GRPC.USER_SERVICE) private client: ClientGrpc,
   ) {}
 
-  async sendOtp(data: ISendOtp) : Promise<{code : string}> {
+  onModuleInit() {
+    this.userService = this.client.getService<IGRPCService>(
+      GRPC.PROTO_USER_SERVICE,
+    );
+  }
+  async sendOtp(data: ISendOtp): Promise<{ code: string }> {
     const existingOtp = await this.otpRepository.findByPhone(data.phone);
 
-    console.log(existingOtp);
     if (
       existingOtp &&
       existingOtp.createdAt > new Date(Date.now() - 2 * 60 * 1000)
@@ -33,41 +49,51 @@ export class AuthService {
       code: String(code),
       expiresIn: new Date(Date.now() + TWO_MINUTES),
       isUsed: false,
-      phoneNumber: data.phone,
+      phone: data.phone,
     });
 
     //TODO send otp via sms
-    return { code : otp.code};
+    return { code: otp.code };
   }
 
-  // async confirmOtp(data: CheckOtpDto) {
-  //   const dbOtp = await this.otpRepository.findLastOtp(
-  //     data.phoneNumber,
-  //     data.code,
-  //   );
+  async confirmOtp(data: CheckOtpDto) {
+    const dbOtp = await this.otpRepository.findLastOtp(data.phone, data.code);
 
-  //   if (!dbOtp || dbOtp.expiresIn < new Date()) {
-  //     throw new BadRequestException(AuthMessage.INVALID_OTP_CODE);
-  //   }
+    if (!dbOtp || dbOtp.expiresIn < new Date()) {
+      throw new BadRequestException(AuthMessage.INVALID_OTP_CODE);
+    }
 
-  //   await this.otpRepository.update(dbOtp.id, { isUsed: true });
+    await this.otpRepository.update(dbOtp.id, { isUsed: true });
 
-  //   if (data.userType == AuthUserType.Guest) {
+    if (data.userType == AuthUserType.Guest) {
+      try {
+        const response = await firstValueFrom(
+          this.userService.checkUserExist({ phone: data.phone }),
+        );
+        // Check if user exists in the response
+        if (response.id) {
+          return this.tokenService.createOtpToken({ UserId: response.id });
+        }
+        const newUserResponse = await firstValueFrom(
+          this.userService.createUser({ phone: data.phone }),
+        );
+        return this.tokenService.createOtpToken({
+          UserId: newUserResponse.id,
+        });
+      } catch (error) {
+        console.error('gRPC error:', error);
+        throw new ServiceUnavailableException(
+          ServerMessages.SERVICE_UNAVAILABLE,
+        );
+      }
+    }
 
-  //     const user = await this.userRepository.findByPhone(data.phoneNumber);
+    throw new ServiceUnavailableException(ServerMessages.SERVICE_UNAVAILABLE);
+  }
 
-  //     if (user) {
-  //       return this.tokenService.createOtpToken({ UserId: user.id });
-  //     } else {
-  //       const user = await this.userRegister(data.phoneNumber);
-  //       return this.tokenService.createOtpToken({ UserId: user.id });
-  //     }
-  //   }else throw new ServiceUnavailableException(ServerMessages.SERVICE_UNAVAILABLE)
-  // }
-
-  // private async userRegister(phoneNumber: string): Promise<User> {
+  // private async userRegister(phone: string): Promise<User> {
   //   return await this.userRepository.create({
-  //     phone: phoneNumber,
+  //     phone: phone,
   //     email: null,
   //     firstName: null,
   //     lastName: null,

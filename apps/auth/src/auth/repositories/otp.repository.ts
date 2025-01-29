@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Otp } from "@prisma/client";
 import { PrismaService } from "libs/prisma/src/prisma.service";
-import { IOtpRepository } from "../interfaces/auth.repository";
+import { IOtpRepository } from "../interfaces/auth.interface";
 
 
 
@@ -41,10 +41,10 @@ export class OtpRepository implements IOtpRepository<Otp> {
     })
   }
 
-  async findByPhone(phoneNumber: string): Promise<Otp> {
+  async findByPhone(phone: string): Promise<Otp> {
     return await this.prismaService.otp.findFirst({
       where: {
-        phoneNumber,
+        phone,
         isUsed: false,
       },
       orderBy: {
@@ -56,7 +56,7 @@ export class OtpRepository implements IOtpRepository<Otp> {
   async findLastOtp(phone: string, code: string): Promise<Otp> {
     return await this.prismaService.otp.findFirst({
       where: {
-        phoneNumber: phone,
+        phone,
         isUsed: false,
         code,
       },

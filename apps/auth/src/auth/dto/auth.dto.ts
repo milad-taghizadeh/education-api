@@ -15,7 +15,7 @@ export class CheckOtpDto {
   @IsString()
   @IsNotEmpty()
   @IsPhoneNumber("IR")
-  phoneNumber: string
+  phone: string
 
   @IsString()
   @IsNotEmpty()
