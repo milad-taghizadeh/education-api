@@ -59,6 +59,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/education/tsconfig.app.json"
       }
+    },
+    "enroll": {
+      "type": "application",
+      "root": "apps/enroll",
+      "entryFile": "main",
+      "sourceRoot": "apps/enroll/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/enroll/tsconfig.app.json"
+      }
     }
   }
 }
