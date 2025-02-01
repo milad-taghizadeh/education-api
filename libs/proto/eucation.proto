@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package education;
+
+service CourseService {
+rpc findUserCourse(FindCourseRequest) returns (FindUserCourseResponse)
+
+}
+
+service LessonService {}
+service EpisodeService {}

@@ -3,6 +3,8 @@ import { AuthModule } from './auth/auth.module';
 import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 import { join } from 'path';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AuthModule);
@@ -22,7 +24,7 @@ async function bootstrap() {
   //     protoPath: join(__dirname, 'auth/proto/auth.proto'),
   //   },  
   // })
-  
+  app.use(cookieParser(process.env.COOKIE_SECRET));
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
     credentials: true,

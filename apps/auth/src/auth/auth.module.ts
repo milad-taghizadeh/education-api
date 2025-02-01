@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './services/auth.service';
 import { TokenService } from './services/token.service';
@@ -8,6 +8,8 @@ import { JwtService } from '@nestjs/jwt';
 import { ClientsModule, GrpcService, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { GRPC } from './enums/grpc.enum';
+import { VerifyToken } from 'libs/common';
+import { UserRepository } from 'apps/user/src/repositories/user.repository';
 
 @Module({
   imports: [PrismaModule,
@@ -24,6 +26,10 @@ import { GRPC } from './enums/grpc.enum';
     ]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, TokenService, OtpRepository, JwtService],
+  providers: [AuthService, TokenService, OtpRepository, JwtService, VerifyToken, UserRepository],
 })
-export class AuthModule {}
+export class AuthModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(VerifyToken).forRoutes('*');
+  }
+}

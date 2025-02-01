@@ -86,14 +86,15 @@ model Course_Details {
 }
 
 model CourseUser {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   userId   String   @db.ObjectId
   courseId String[] @db.ObjectId
 
   user   User   @relation(fields: [userId], references: [id])
   course Course @relation(fields: [courseId], references: [id])
 
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @default(now()) @updatedAt
   @@map("course_user")
 }
 

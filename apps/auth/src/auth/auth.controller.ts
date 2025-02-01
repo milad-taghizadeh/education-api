@@ -10,6 +10,7 @@ import { CheckOtpDto, SendOtpDto } from './dto/auth.dto';
 import { Response } from 'express';
 import { LoginMessage, LogOutMessage } from './messages/auth.messages';
 import { routes } from './routes/routes';
+import { User } from 'libs/common';
 
 @Controller(routes.mainRoute)
 export class AuthController {
