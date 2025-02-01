@@ -58,7 +58,6 @@ model Course {
   title       String
   description String
   episodeQty  Int
-  media_path  String[]
 
   lessonId String @db.ObjectId
   lesson   Lesson @relation(fields: [lessonId], references: [id])
