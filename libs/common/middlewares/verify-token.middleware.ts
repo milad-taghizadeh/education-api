@@ -11,6 +11,7 @@ import { UserRepository } from 'apps/user/src/repositories/user.repository';
 import { CookiePayload } from "apps/auth/src/auth/types/payload";
 import { JwtService } from '@nestjs/jwt';
 
+@Injectable() // Add this decorator
 export class VerifyToken implements NestMiddleware {
   //DI
   constructor(
@@ -31,6 +32,7 @@ export class VerifyToken implements NestMiddleware {
 
     // verify token and get the user
     const payload = this.tokenService.verifyToken(token);
+
     if (!payload) {
       return next();
     }
