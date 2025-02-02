@@ -1,15 +1,8 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NestMiddleware,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request } from 'express';
-import { ConfigService } from '@nestjs/config';
-import { TokenService } from 'apps/auth/src/auth/services/token.service';
+import { TokenService } from '../token/token.service';
 import { UserRepository } from 'apps/user/src/repositories/user.repository';
-import { CookiePayload } from "apps/auth/src/auth/types/payload";
-import { JwtService } from '@nestjs/jwt';
+import { CookiePayload } from '@app/common';
 
 @Injectable() // Add this decorator
 export class VerifyToken implements NestMiddleware {

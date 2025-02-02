@@ -68,6 +68,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/enroll/tsconfig.app.json"
       }
+    },
+    "common": {
+      "type": "library",
+      "root": "libs/common",
+      "entryFile": "index",
+      "sourceRoot": "libs/common/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/common/tsconfig.lib.json"
+      }
     }
   }
 }

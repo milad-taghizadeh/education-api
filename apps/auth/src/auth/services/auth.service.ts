@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 
-import { TokenService } from './token.service';
+import { TokenService } from '@app/common';
 import { OtpRepository } from '../repositories/otp.repository';
 import { CheckOtpDto, SendOtpDto } from '../dto/auth.dto';
 import { User } from '@prisma/client';

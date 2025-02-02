@@ -2,8 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { CourseService } from './services/course.service';
 import { OwnCourseDto } from './dto/own-course.dto';
 import { routes } from './routes/routes';
-import { JwtGuard, User } from 'libs/common';
-import { CookiePayload } from 'apps/auth/src/auth/types/payload';
+import { JwtGuard, User } from '@app/common';
+import { CookiePayload } from '@app/common';
 import { CourseUser } from '@prisma/client';
 
 @Controller(routes.mainRoute)
