@@ -32,7 +32,7 @@ export class VerifyToken implements NestMiddleware {
 
     // verify token and get the user
     const payload = this.tokenService.verifyToken(token);
-
+    console.log(payload);
     if (!payload) {
       return next();
     }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { IUserRepository } from '../interfaces/user.interface';
 import { PrismaService } from 'libs/prisma/src/prisma.service';
-import { User } from '@prisma/client';
+import { CourseUser, User } from '@prisma/client';
 
 @Injectable()
 export class UserRepository implements IUserRepository<User> {
@@ -37,5 +37,15 @@ export class UserRepository implements IUserRepository<User> {
 
   findMany?(filters: User): Promise<User[]> {
     throw new Error('Method not implemented.');
+  }
+
+
+  async createIndex(userId: string): Promise<CourseUser> {
+    return await this.prismaService.courseUser.create({
+      data: {
+        userId,
+        courseId: [],
+      },
+    });
   }
 }

@@ -13,13 +13,14 @@ export class TokenService {
       secret: process.env.OTP_TOKEN_SECRET,
       expiresIn: 60 * 3,
     });
-    console.log(token);
     return token;
   }
 
   verifyToken(token: string): CookiePayload  {
     try {
-      const payload: CookiePayload  = this.jwtService.verify(token)
+      const payload: CookiePayload  = this.jwtService.verify(token, {
+        secret: process.env.OTP_TOKEN_SECRET,
+      });
       console.log(payload);
       return payload
     } catch {

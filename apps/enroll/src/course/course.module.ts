@@ -21,6 +21,7 @@ import * as cookieParser from 'cookie-parser';
     JwtService,
   ],
 })
+
 export class CourseModule {
   configure(consumer: MiddlewareConsumer) {
     consumer

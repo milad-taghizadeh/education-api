@@ -9,10 +9,6 @@ export class CourseService {
   constructor(private readonly courseRepository: CourseRepository) {}
   async ownCourse(data: OwnCourse, userId: string): Promise<CourseUser> {
     await this._checkCourseExist(data.courseId);
-    const ownedCourse = await this.courseRepository.findOwnedCourses(userId);
-    if (!ownedCourse) {
-      await this.courseRepository.createIndex(userId);
-    }
     return await this.courseRepository.ownCourse(userId, data);
   }
 

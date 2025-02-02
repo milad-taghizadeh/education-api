@@ -2,7 +2,7 @@ import { IsArray, IsNotEmpty, IsString } from "class-validator";
 
 export class OwnCourseDto {
   
-  @IsArray()
+  @IsString()
   @IsNotEmpty()
   courseId: string;
 
