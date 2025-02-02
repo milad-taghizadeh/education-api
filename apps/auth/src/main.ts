@@ -1,29 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
-import { Transport, MicroserviceOptions } from '@nestjs/microservices';
-import { join } from 'path';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 
-
 async function bootstrap() {
   const app = await NestFactory.create(AuthModule);
-  // const app = await NestFactory.createMicroservice<MicroserviceOptions>(AuthModule, {
-  //   transport: Transport.GRPC,
-  //   options: {
-  //     url: 'localhost:5001',
-  //     package: 'auth',
-  //     protoPath: join(__dirname, 'auth/proto/auth.proto'),
-  //   },
-  // });
-  // app.connectMicroservice({
-  //   transport: Transport.GRPC,
-  //   options: {
-  //     url: 'localhost:5001',
-  //     package: 'auth',
-  //     protoPath: join(__dirname, 'auth/proto/auth.proto'),
-  //   },  
-  // })
   app.use(cookieParser(process.env.COOKIE_SECRET));
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
@@ -31,7 +12,14 @@ async function bootstrap() {
     origin: '*',
   });
   
-  Logger.verbose('::::::::::: AUTH : 3000 =======> STARTED :::::::::::');
-  await app.listen(3000, '0.0.0.0');
+  const port = parseInt(process.env.AUTH_SERVER, 10) || 3000;
+  
+  Logger.verbose(`::::::::::: AUTH : ${port} =======> STARTED :::::::::::`);
+  try {
+    await app.listen(port, '0.0.0.0');
+  } catch (error) {
+    Logger.error(`Failed to start Auth server on port ${port}:`, error);
+    process.exit(1);
+  }
 }
 bootstrap();

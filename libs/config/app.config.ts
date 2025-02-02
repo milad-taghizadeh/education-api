@@ -2,16 +2,13 @@ import { registerAs } from '@nestjs/config';
 
 export enum ConfigKeys {
   App = 'App',
-  Db = 'Db',
 }
 
 const AppConfig = registerAs(ConfigKeys.App, () => ({
-  SERVER_PORT: 3000,
-  SWAGGER_ENDPOINT: 'api-doc',
-  SWAGGER_TITLE: 'Store-API',
-  SWAGGER_DESCRIPTION: 'Api endpoints of a store application',
-  SWAGGER_VERSION: '2.0.0',
-  // SWAGGER_ADD_TAG: 'TEST',
+  AUTH_SERVER: 3000,
+  EDUCATION_SERVER: 3001,
+  ENROLL_SERVER: 3002,
+  USER_MICROSERVICE: 5002
 }));
 
 export const configurations = [AppConfig];

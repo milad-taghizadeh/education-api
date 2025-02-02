@@ -13,7 +13,14 @@ async function bootstrap() {
 
     app.use(cookieParser(process.env.COOKIE_SECRET));
     
-    Logger.verbose('::::::::::: ENROLL : 3002 =======> STARTED :::::::::::');
-    await app.listen(3002, '0.0.0.0');
+    const port = parseInt(process.env.ENROLL_SERVER, 10) || 3002;
+    
+    Logger.verbose(`::::::::::: ENROLL : ${port} =======> STARTED :::::::::::`);
+    try {
+      await app.listen(port, '0.0.0.0');
+    } catch (error) {
+      Logger.error(`Failed to start Enroll server on port ${port}:`, error);
+      process.exit(1);
+    }
 }
 bootstrap();

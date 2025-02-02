@@ -5,17 +5,24 @@ import { join } from 'path';
 import { Logger, ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
+  const port = parseInt(process.env.USER_MICROSERVICE, 10) || 5002;
+
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(UserModule, {
     transport: Transport.GRPC,
     options: {
-      url: 'localhost:5002',
+      url: `localhost:${port}`,
       package: 'user',
       protoPath: 'libs/proto/user.proto',
     },
   });
 
   app.useGlobalPipes(new ValidationPipe());
-  Logger.verbose('::::::::::: User : 5002 =======> STARTED :::::::::::');
-  await app.listen();
+  Logger.verbose(`::::::::::: User : ${port} =======> STARTED :::::::::::`);
+  try {
+    await app.listen();
+  } catch (error) {
+    Logger.error(`Failed to start microservice on port ${port}:`, error);
+    process.exit(1);
+  }
 }
 bootstrap();

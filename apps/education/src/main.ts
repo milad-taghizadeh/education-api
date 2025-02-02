@@ -11,7 +11,14 @@ async function bootstrap() {
     origin: '*',
   });
 
-  Logger.verbose('::::::::::: Education : 3001 =======> STARTED :::::::::::');
-  await app.listen(process.env.port ?? 3001);
+  const port = parseInt(process.env.EDUCATION_SERVER, 10) || 3001;
+
+  Logger.verbose(`::::::::::: Education : ${port} =======> STARTED :::::::::::`);
+  try {
+    await app.listen(port, '0.0.0.0');
+  } catch (error) {
+    Logger.error(`Failed to start Education server on port ${port}:`, error);
+    process.exit(1);
+  }
 }
 bootstrap();

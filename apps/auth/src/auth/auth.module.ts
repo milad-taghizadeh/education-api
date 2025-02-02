@@ -6,11 +6,7 @@ import { PrismaModule } from '@app/prisma';
 import { OtpRepository } from './repositories/otp.repository';
 import { JwtService } from '@nestjs/jwt';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { join } from 'path';
 import { GRPC } from './enums/grpc.enum';
-import { VerifyToken } from '@app/common';
-import { UserRepository } from 'apps/user/src/repositories/user.repository';
-
 @Module({
   imports: [
     PrismaModule,
@@ -22,7 +18,7 @@ import { UserRepository } from 'apps/user/src/repositories/user.repository';
         options: {
           package: GRPC.USER_PACKAGE,
           protoPath: 'libs/proto/user.proto',
-          url: 'localhost:5002',
+          url: `localhost:${process.env.USER_MICROSERVICE}`,
         },
       },
     ]),
@@ -30,8 +26,4 @@ import { UserRepository } from 'apps/user/src/repositories/user.repository';
   controllers: [AuthController],
   providers: [AuthService, OtpRepository],
 })
-export class AuthModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(VerifyToken).forRoutes('*');
-  }
-}
+export class AuthModule {}
