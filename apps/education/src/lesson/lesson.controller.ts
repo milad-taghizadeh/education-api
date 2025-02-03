@@ -10,6 +10,7 @@ import {
   Query,
   UseInterceptors,
   UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { LessonService } from './services/lesson.service';
 import { CreateLessonDto } from './dto/create-lesson.dto';
@@ -29,8 +30,10 @@ export class LessonController {
     @UploadedFile() file: Express.Multer.File,
     @Body() createLessonDto: CreateLessonDto,
   ): Promise<Lesson> {
-    console.log(file);
-    return this.lessonService.create({...createLessonDto, media_path: file.filename});
+    if (!file) {
+      throw new BadRequestException('File is required');
+    }
+    return this.lessonService.create({...createLessonDto, media_path: file?.filename});
   }
 
   @Get(routes.findAll)
@@ -44,11 +47,13 @@ export class LessonController {
   }
 
   @Put(routes.update)
+  @UseInterceptors(FileInterceptor('media_path', multerOptions))
   async update(
     @Query('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
     @Body() updateLessonDto: UpdateLessonDto,
   ): Promise<Lesson> {
-    return this.lessonService.update(id, updateLessonDto);
+    return this.lessonService.update(id, {...updateLessonDto, media_path: file?.filename});
   }
 
   @Delete(routes.remove)
