@@ -34,7 +34,7 @@
     "@nestjs/mapped-types": "^2.1.0",
     "@nestjs/microservices": "^10.4.15",
     "@nestjs/passport": "^11.0.4",
-    "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/platform-express": "^10.4.15",
     "@nestjs/throttler": "^6.3.0",
     "@prisma/client": "^6.2.1",
     "@sentry/node": "^8.50.0",
@@ -111,7 +111,8 @@
     "moduleNameMapper": {
       "^@app/database(|/.*)$": "<rootDir>/libs/database/src/$1",
       "^@app/prisma(|/.*)$": "<rootDir>/libs/prisma/src/$1",
-      "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1"
+      "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1",
+      "^@config/config(|/.*)$": "<rootDir>/libs/config/src/$1"
     },
     "prisma": {
       "schema": "<rootDir>/libs/prisma/src/prisma/schema.prisma"

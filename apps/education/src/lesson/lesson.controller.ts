@@ -1,17 +1,36 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Put,
+  Query,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
 import { LessonService } from './services/lesson.service';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
 import { routes } from './routes/routes';
 import { Lesson } from '@prisma/client';
+import { multerOptions } from '@config/config';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller(routes.mainRoute)
 export class LessonController {
   constructor(private readonly lessonService: LessonService) {}
 
   @Post(routes.create)
-  async create(@Body() createLessonDto: CreateLessonDto) : Promise<Lesson> {
-    return this.lessonService.create(createLessonDto);
+  @UseInterceptors(FileInterceptor('media_path', multerOptions))
+  async create(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() createLessonDto: CreateLessonDto,
+  ): Promise<Lesson> {
+    console.log(file);
+    return this.lessonService.create({...createLessonDto, media_path: file.filename});
   }
 
   @Get(routes.findAll)
@@ -25,7 +44,10 @@ export class LessonController {
   }
 
   @Put(routes.update)
-  async update(@Query('id') id: string, @Body() updateLessonDto: UpdateLessonDto) : Promise<Lesson> {
+  async update(
+    @Query('id') id: string,
+    @Body() updateLessonDto: UpdateLessonDto,
+  ): Promise<Lesson> {
     return this.lessonService.update(id, updateLessonDto);
   }
 

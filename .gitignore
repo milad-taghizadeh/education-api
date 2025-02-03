@@ -64,3 +64,8 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 package-lock.json
 
 tsconfig.build.tsbuildinfo
+
+
+# Media
+/media
+/media/*

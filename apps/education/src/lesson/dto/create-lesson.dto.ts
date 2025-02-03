@@ -11,7 +11,4 @@ export class CreateLessonDto {
   @IsNotEmpty()
   @Length(1, 250)
   description : string;
-  
-  @IsString()
-  media_path : string;
 }
