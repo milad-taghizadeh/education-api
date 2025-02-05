@@ -44,6 +44,7 @@ export class AuthService {
 
     const code = Math.floor(Math.random() * 90000) + 10000;
     const TWO_MINUTES = 2 * 60 * 1000;
+    throw "jhxhs"
 
     const otp = await this.otpRepository.create({
       code: String(code),

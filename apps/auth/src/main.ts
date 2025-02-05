@@ -2,9 +2,11 @@ import { NestFactory } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import { GlobalExceptionFilter } from '@app/common/filters/exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AuthModule);
+  app.useGlobalFilters(new GlobalExceptionFilter());
   app.use(cookieParser(process.env.COOKIE_SECRET));
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
