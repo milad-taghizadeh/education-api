@@ -5,8 +5,34 @@ services:
     build:
       context: .
       dockerfile: apps/auth/Dockerfile
-    ports:
-      - "3000:3000"
+    network_mode: host
+    environment:
+      - DATABASE_URL=mongodb://mongodb:27017/education
+    depends_on:
+      - mongodb
+  education:
+    build:
+      context: .
+      dockerfile: apps/education/Dockerfile
+    network_mode: host
+    environment:
+      - DATABASE_URL=mongodb://mongodb:27017/education
+    depends_on:
+      - mongodb
+  enroll:
+    build:
+      context: .
+      dockerfile: apps/enroll/Dockerfile
+    network_mode: host
+    environment:
+      - DATABASE_URL=mongodb://mongodb:27017/education
+    depends_on:
+      - mongodb
+  user:
+    build:
+      context: .
+      dockerfile: apps/user/Dockerfile
+    network_mode: host
     environment:
       - DATABASE_URL=mongodb://mongodb:27017/education
     depends_on:
@@ -19,7 +45,7 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
-    command: ["mongod --replSet rs0"]
+    command: ["mongod", "--replSet", "rs0"]
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 10s
